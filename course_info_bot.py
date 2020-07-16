@@ -10,7 +10,7 @@ def run_bot(reddit):
     for post in sub: #looping through all the latest posts 
         if ("!find" in post.selftext) and (not post.saved):  # checking if the bot is called in that post and if the bot hasn't already replied 
             reply_post(post)
-    #post = reddit.submission(url = "https://www.reddit.com/r/test/comments/hrxbu6/find_comp_2080/")
+
         post.comments.replace_more(limit=None)
         for comment in post.comments.list(): #looping through all the comments (even replies to other comments)
             if ("!find" in comment.body) and (not comment.saved):
