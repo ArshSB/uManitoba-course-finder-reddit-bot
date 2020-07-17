@@ -22,4 +22,4 @@ make sure to leave a space between *!find, course_name and course_code*
 ## Built With
 * [Python 3.8.3](https://www.python.org/downloads/)
 * [PRAW 7.0.1](https://praw.readthedocs.io/en/latest/index.html) - for working with Reddit API
-* [BeautifulSoup 4.9.0](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) - for UBC course database parsing
+* [BeautifulSoup 4.9.0](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) - for course database parsing
