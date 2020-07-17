@@ -2,6 +2,7 @@ import praw
 import time
 from bs4 import BeautifulSoup
 import requests
+import re
 
 def run_bot(reddit):
     
@@ -53,23 +54,45 @@ def login_bot():
 
 
 def get_info(course_name, course_code):
-    
-    url = "http://crscalprod.ad.umanitoba.ca/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=27309&entitytype=CID&entitycode=" + course_name + "+" + course_code  #get the database for the course name
+    term = ''
+
+    date_today = time.localtime()
+    date_today_year = str(date_today.tm_year)
+    date_today_month = date_today.tm_mon
+
+    # determine the term that we are in, this will query aurora for the current term
+    if date_today_month >= 9:
+        term = date_today_year + '90'
+    elif date_today_month >= 5:
+        term = date_today_year + '50'
+    else:
+        term = date_today_year + '10'
+
+    url = 'https://aurora.umanitoba.ca/banprod/bwckctlg.p_disp_course_detail?cat_term_in={}&subj_code_in={}&crse_numb_in={}'.format(term, course_name, course_code)
     req = requests.get(url)
     soup = BeautifulSoup(req.content, 'html.parser')
     
-    text_td = soup.find_all("td", class_ = "courseValueCell")  # get course information from the webpage and save the name, decription etc. as a list
+    title = soup.find("td", class_ = "nttitle")
     
-    if not text_td: # if empty, this means the course name doesn't exist 
+    if not title: # if empty, this means the course name doesn't exist 
         return "Sorry, I couldn't find the course you were looking for :("
-    
-    else:
-        name = "*Course name:* " + text_td[2].text    
-        faculty = "*Faculty:* " + text_td[4].text
-        credit_hours = "*Credit hours:* " + text_td[1].text
-        description  = "*Description:* " + text_td[3].text
         
-        return (name + "\n\n" + faculty + "\n\n" + credit_hours + "\n\n" + description)
+    # find the description of the course and strip it of all the newlines
+    desc = soup.find("td", class_ = "ntdefault").text.replace('\n', '')
+    # get only the part upto where it says "Credit hours"
+    desc = re.findall('(.*) Credit hours', desc)[0]
+    # split on '.-', first element will be description and second part will be cr hours
+    split_desc = desc.split('.-')
+
+    # find the faculty this course belongs to
+    fac = soup.find('a', href = re.compile('/banprod/bwckctlg\.p_disp_listcrse')).text
+
+    name = "*Course name:* " + title.text.strip()
+    faculty = "*Faculty:* " + fac.strip()
+    credit_hours = "*Credit hours:* " + split_desc[1].strip()
+    description  = "*Description:* " + split_desc[0].strip()
+        
+    return (name + "\n\n" + faculty + "\n\n" + credit_hours + "\n\n" + description)
     
 
 def main():  
