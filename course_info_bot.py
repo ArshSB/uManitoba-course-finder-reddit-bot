@@ -73,8 +73,11 @@ def get_info(course_name, course_code):
     soup = BeautifulSoup(req.content, 'html.parser')
     
     title = soup.find("td", class_ = "nttitle")
+
+    # find the faculty this course belongs to
+    fac = soup.find('a', href = re.compile('/banprod/bwckctlg\.p_disp_listcrse'))
     
-    if not title: # if empty, this means the course name doesn't exist 
+    if not title or not fac: # if empty, this means the course name doesn't exist 
         return "Sorry, I couldn't find the course you were looking for :("
         
     # find the description of the course and strip it of all the newlines
@@ -84,11 +87,9 @@ def get_info(course_name, course_code):
     # split on '.-', first element will be description and second part will be cr hours
     split_desc = desc.split('.-')
 
-    # find the faculty this course belongs to
-    fac = soup.find('a', href = re.compile('/banprod/bwckctlg\.p_disp_listcrse')).text
 
     name = "*Course name:* " + title.text.strip()
-    faculty = "*Faculty:* " + fac.strip()
+    faculty = "*Faculty:* " + fac.text.strip()
     credit_hours = "*Credit hours:* " + split_desc[1].strip()
     description  = "*Description:* " + split_desc[0].strip()
         
