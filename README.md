@@ -1,6 +1,8 @@
 # course-finder-reddit-bot
 a uManitoba subreddit version of my previous course finder bot
 
+See the bot in action [here](https://www.reddit.com/user/kidshelplinebot)
+
 ## Purpose
 this bot monitors the uManitoba subreddit and replies to users with their requested course description and prerequisites from the uManitoba database.
 
