@@ -8,6 +8,8 @@ this bot monitors the uManitoba subreddit and replies to users with their reques
 
 Please note the database is not readily available in one place and webpage so I used [this](http://crscalprod.ad.umanitoba.ca/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=27309&entitytype=CID&entitycode=COMP+1010) arbitrary link and manipulated the URL content by replacing the last part of the link with a specific course name and code, which yields a new webpage with the respective course information
 
+Note: As of May 2021, uManitoba has updated their databases and their website, so the above link is invalid. Perhaps in the near future I will update the code to fix this change.
+
 ## Usage
 either through commenting or posting in the subreddit, simply call the bot like this
 ```
